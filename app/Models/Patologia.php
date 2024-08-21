@@ -13,7 +13,7 @@ class Patologia extends Model
     public $table = 'patologias';
     protected $fillable = ['nombre'];
 
-    public function articulos(): HasMany
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class);
     }

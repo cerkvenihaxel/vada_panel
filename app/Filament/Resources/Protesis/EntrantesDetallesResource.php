@@ -21,7 +21,7 @@ class EntrantesDetallesResource extends Resource
 
     protected static ?string $navigationGroup = 'Convenio Prótesis';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 2;
 
 
 
@@ -32,8 +32,11 @@ class EntrantesDetallesResource extends Resource
                 Forms\Components\TextInput::make('entrantes_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('articles_id')
-                ->required(),
+                Forms\Components\Select::make('articles_id')
+                    ->relationship('articles', 'des_articulo')
+                    ->preload()
+                    ->searchable()
+                    ->required(),
                 Forms\Components\TextInput::make('cantidad')
                     ->required()
                     ->numeric(),
@@ -47,7 +50,7 @@ class EntrantesDetallesResource extends Resource
                 Tables\Columns\TextColumn::make('entrantes_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('articles_id')
+                Tables\Columns\TextColumn::make('articles.des_articulo')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('cantidad')

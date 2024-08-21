@@ -40,7 +40,7 @@ class ArticleResource extends Resource
                 Forms\Components\TextInput::make('precio_compra')
                     ->numeric(),
                 Forms\Components\Select::make('patologia_id')
-                    ->relationship('patologias', 'nombre')
+                    ->relationship('patologia', 'nombre')
                     ->preload()
             ]);
     }
@@ -72,7 +72,7 @@ class ArticleResource extends Resource
                 Tables\Columns\TextColumn::make('precio_compra')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('patologias.nombre')
+                Tables\Columns\TextColumn::make('patologia.nombre')
                     ->numeric()
                     ->sortable(),
             ])

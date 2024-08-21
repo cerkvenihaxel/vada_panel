@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use http\Client\Curl\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -21,6 +22,8 @@ class EntrantesResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-inbox';
 
     protected static ?string $navigationGroup = 'Convenio Prótesis';
+
+    protected static ?int $navigationSort = 0;
 
 
 
@@ -39,6 +42,7 @@ class EntrantesResource extends Resource
                 Forms\Components\Select::make('estado_pacientes_id')
                 ->relationship('estado_pacientes', 'estado')
                 ->required()
+                    ->preload()
                 ->searchable()
                 ->label('Estado del paciente')
                 ]),
@@ -49,18 +53,21 @@ class EntrantesResource extends Resource
                     ->required()
                     ->searchable()
                     ->preload(),
-                Forms\Components\Select::make('estado_solicitud_id')
-                ->relationship('estado_solicitud', 'estado')
-                ->required()
-                ->searchable(),
                 Forms\Components\DatePicker::make('fecha_cirugia')
                     ->required(),
                 Forms\Components\Select::make('medicos_id')
                     ->relationship('medicos', 'nombre')
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->required()
+                ->columnSpanFull(),
                 Forms\Components\TextInput::make('nro_solicitud')
                     ->required(),
+                Forms\Components\Select::make('estado_solicitud_id')
+                    ->relationship('estado_solicitud', 'estado')
+                    ->required()
+                    ->preload()
+                    ->searchable(),
                 Forms\Components\Section::make('Detalles de Artículos')
                     ->schema([
                         Forms\Components\HasManyRepeater::make('detalles')
@@ -69,6 +76,7 @@ class EntrantesResource extends Resource
                                 Forms\Components\Select::make('articulos_id')
                                     ->relationship('articles', 'des_articulo')
                                     ->searchable()
+                                    ->preload()
                                     ->required()
                                     ->label('Seleccione el artículo'),
                                 Forms\Components\TextInput::make('cantidad')
@@ -85,7 +93,6 @@ class EntrantesResource extends Resource
             ])->columns(2),
 
 
-
                 Forms\Components\Section::make('Suba de archivos')
                     ->schema([
                 Forms\Components\FileUpload::make('file_1')
@@ -96,10 +103,10 @@ class EntrantesResource extends Resource
                     ->label('Archivo 3'),
                 Forms\Components\FileUpload::make('file_4')
                     ->label('Archivo 4'),
-
                     ])->columns(2),
                 Forms\Components\TextInput::make('user_stamps')
                     ->disabled(true)
+                    ->default('admin@vada.com')
                     ->label('Usuario de carga'),
             ]);
     }
@@ -108,40 +115,36 @@ class EntrantesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('afiliados_id')
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->label('Fecha de carga'),
+                Tables\Columns\TextColumn::make('afiliados.nombre')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('clinicas_id')
+                Tables\Columns\TextColumn::make('clinicas.nombre')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('estado_pacientes_id')
+                Tables\Columns\TextColumn::make('estado_pacientes.estado')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('estado_solicitud_id')
+                Tables\Columns\TextColumn::make('estado_solicitud.estado')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('fecha_cirugia')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('medicos_id')
+                Tables\Columns\TextColumn::make('medicos.nombre')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nro_solicitud')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('file_1')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_2')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_3')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_4')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('user_stamps')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -151,6 +154,7 @@ class EntrantesResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -163,7 +167,7 @@ class EntrantesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            EntrantesRelationManager::class,
+            RelationManagers\AfiliadosRelationManager::class
         ];
     }
 
@@ -175,4 +179,6 @@ class EntrantesResource extends Resource
             'edit' => Pages\EditEntrantes::route('/{record}/edit'),
         ];
     }
+
+
 }

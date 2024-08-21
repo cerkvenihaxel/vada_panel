@@ -43,11 +43,11 @@ class Entrantes extends Model
         return $this->belongsTo(Medicos::class);
     }
 
-    public function estadoSolicitud(){
+    public function estado_solicitud(){
         return $this->belongsTo(EstadoSolicitud::class);
     }
 
-   public function estadoPacientes(){
+   public function estado_pacientes(){
         return $this->belongsTo(EstadoPaciente::class);
    }
 

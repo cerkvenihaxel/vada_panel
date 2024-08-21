@@ -17,7 +17,7 @@ class EntrantesDetalles extends Model
         return $this->belongsTo(Entrantes::class, 'entrantes_id');
     }
 
-    public function article()
+    public function articles()
     {
         return $this->belongsTo(Article::class);
     }

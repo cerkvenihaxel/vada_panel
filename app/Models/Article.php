@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Protesis\CotizacionesDetalles;
 use App\Models\Protesis\EntrantesDetalles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ class Article extends Model
     protected $fillable = ['des_articulo','codigo_articulo','marca','stock','precio_venta','precio_compra', 'patologia_id'];
 
 
-    public function patologias(): BelongsTo
+    public function patologia(): BelongsTo
     {
         return $this->belongsTo(Patologia::class);
     }
@@ -24,4 +25,10 @@ class Article extends Model
     {
         return $this->hasMany(EntrantesDetalles::class, 'article_id');
     }
+
+    public function detalles_cotizacion(): HasMany
+    {
+        return $this->hasMany(CotizacionesDetalles::class, 'article_id');
+    }
+
 }

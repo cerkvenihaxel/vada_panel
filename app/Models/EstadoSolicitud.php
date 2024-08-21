@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Protesis\Cotizaciones;
 use App\Models\Protesis\Entrantes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,5 +18,10 @@ class EstadoSolicitud extends Model
     public function EntrantesProtesis(): HasMany
     {
         return $this->hasMany(Entrantes::class);
+    }
+
+    public function cotizaciones(): HasMany
+    {
+        return $this->hasMany(Cotizaciones::class);
     }
 }
