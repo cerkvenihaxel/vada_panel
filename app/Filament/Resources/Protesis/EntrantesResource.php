@@ -68,6 +68,7 @@ class EntrantesResource extends Resource
                     ->required()
                     ->preload()
                     ->searchable(),
+
                 Forms\Components\Section::make('Detalles de Artículos')
                     ->schema([
                         Forms\Components\HasManyRepeater::make('detalles')
@@ -86,6 +87,7 @@ class EntrantesResource extends Resource
                             ->columns(2)
                             ->label('Detalles'),
                     ]),
+
                 Forms\Components\Textarea::make('observaciones')
                     ->required()
                     ->columnSpanFull()

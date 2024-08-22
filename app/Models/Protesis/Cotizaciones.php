@@ -42,7 +42,7 @@ class Cotizaciones extends Model
         return $this->belongsTo(EstadoPedido::class);
     }
 
-    public function detalles_cotizacion(){
+    public function detalles(){
         return $this->hasMany(CotizacionesDetalles::class);
     }
 }

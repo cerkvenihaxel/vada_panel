@@ -45,10 +45,10 @@ class CotizacionesResource extends Resource
 
                 Forms\Components\Section::make('Detalles de cotización')
                     ->schema([
-                        Forms\Components\HasManyRepeater::make('detalles_cotizacion')
-                            ->relationship('detalles_cotizacion')
+                        Forms\Components\HasManyRepeater::make('detalles')
+                            ->relationship('detalles')
                             ->schema([
-                                Forms\Components\Select::make('articulos_id')
+                                Forms\Components\Select::make('articles_id')
                                     ->relationship('articles', 'des_articulo')
                                     ->searchable()
                                     ->preload()
@@ -60,9 +60,6 @@ class CotizacionesResource extends Resource
                                 Forms\Components\TextInput::make('garantia')
                                 ->required(),
                                 Forms\Components\TextInput::make('precio_unitario')
-                                ->required(),
-                                Forms\Components\TextInput::make('cantidad')
-                                ->numeric()
                                 ->required(),
                                 Forms\Components\TextInput::make('subtotal')
                                 ->required(),
@@ -105,35 +102,23 @@ class CotizacionesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('entrantes_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nro_solicitud')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_limite')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('estado_solicitud_id')
+                Tables\Columns\TextColumn::make('estado_solicitud.estado')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('estado_pedido_id')
+                Tables\Columns\TextColumn::make('estado_pedido.estado')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('file_1')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_2')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_3')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('file_4')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('proveedores_id')
+                Tables\Columns\TextColumn::make('proveedores.nombre')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
